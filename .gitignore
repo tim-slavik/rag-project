@@ -1,0 +1,40 @@
+# ⭐ **Project‑Wide .gitignore (Python + Pipenv + RAG)**
+
+```gitignore
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environments
+venv/
+.venv/
+python-envs/
+
+# Pipenv artifacts
+*.lock.bak
+
+# Downloads / scraped files
+downloads/
+data/raw/
+data/processed/
+
+# Vectorstore files
+*.bin
+*.faiss
+*.index
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Logs
+*.log
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/
+
