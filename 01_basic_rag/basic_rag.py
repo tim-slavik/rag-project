@@ -31,7 +31,7 @@ def build_basic_rag():
     #     json.dump(docs, f, ensure_ascii=False, indent=2)
     
 
-    with(open(os.path.join(os.getcwd(), 'prepared_docs.json'), 'r', encoding='utf-8')) as f:
+    with(open('C:\\Users\\tslav\\Documents\\MyCode\\rag-project\\docs\\prepared_docs.json', 'r', encoding='utf-8')) as f:
         docs = json.load(f)
     
     # Some generic docs for testing.
