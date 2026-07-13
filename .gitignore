@@ -26,7 +26,7 @@ data/processed/
 *.index
 
 # Jupyter
-.ipynb_checkpoints/
+*.ipynb
 
 # Logs
 *.log
