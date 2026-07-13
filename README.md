@@ -39,7 +39,7 @@ Integrated RAG system with orchestration, guardrails, and evaluation.
 ---
 
 ## 🔧 Installation
-
+# Update when files and structure is finalized/complete.
 ```bash
 pip install --upgrade pip
 pipenv install
