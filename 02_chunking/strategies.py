@@ -10,7 +10,10 @@ class FixedSizeChunking:
     Simple fixed-size chunking based on token count.
     Splits text into chunks of `size` tokens with optional `overlap`.
     """
-
+# I am only building a small scale rag for now, so I am using very simple chunk-level metadata.
+# In a large scale version some additional metadata would be useful, such as the parent document id, section, embedding model version, etc.
+# I would also need to update my documents themselves to include a unique id, and possibly a version number and other measures to ensure metadata does not get stale.
+    
     def __init__(self, size=400, overlap=50):
         self.size = size
         self.overlap = overlap
