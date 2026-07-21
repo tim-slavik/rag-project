@@ -29,7 +29,7 @@ def rrf_fusion(
         ranks[doc_id] += 1 / (k + rank + 1)
 
     # Sort by fused score
-    fused = sorted(ranks.items(), key=lambda x: x[1]. reverse=True)
+    fused = sorted(ranks.items(), key=lambda x: x[1], reverse=True)
     
     return fused
 
@@ -53,7 +53,7 @@ def weighted_fusion(
         fused_scores[doc_id] += w_bm25 * score
 
     for doc_id, score in vector_results.items():
-        fused_scores.setdefault(doc_id, 0):
+        fused_scores.setdefault(doc_id, 0)
         fused_scores[doc_id] += w_vector * score
 
     # Sort by fused score
