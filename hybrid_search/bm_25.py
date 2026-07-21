@@ -12,7 +12,7 @@ class BM25:
     def __init__(self, documents: List[str], kl: float = 1.5, b: float = 0.75):
         self.documents = documents 
         self.kl = kl
-        self,b = b
+        self.b = b
 
         self.doc_count = len(documents)
         self.avg_doc_len = sum(len(self._tokenize(doc)) for doc in documents) / self.doc_count
@@ -68,7 +68,7 @@ class BM25:
                 doc_len = self.doc_lengths[doc_id]
 
                 numerator = tf * (self.kl + 1)
-                denominator = tf + self.k1 * ( 1 - self.b + self.b * (doc_len / self.avg_doc_len))
+                denominator = tf + self.kl * ( 1 - self.b + self.b * (doc_len / self.avg_doc_len))
 
                 scores[doc_id] += idf * (numerator / denominator)
                 
