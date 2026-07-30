@@ -1,92 +1,64 @@
-import numpy as np
-from typing import List, Dict, Any, Optional
-
-from hybrid_search.hybrid_retriever import HybridRetriever
-from reranking.base_reranker import BaseReranker
-
-class PipelineOrchestrator:
-    """
-    End to end RAG pipeline orchestrator.
-
-    Responsibilities:
+class PipeLineOrchestrator:
+    """"
+    Full retrieval orchestrator:
     - embed query
-    - run hybrid retrieval
-    - optionally rerank results
-    - return final ranked chunks with text and scores
-
-    This class is the single entry point for the entire retrieval pipeline.
+    - hybrid retrieval
+    - optional reranking
+    - return structured context chunks
     """
 
     def __init__(
             self,
             embed_fn,
-            retriever: HybridRetriever,
-            reranker: Optional[BaseReranker] = None,
-            bm25_top_k: int = 20,
-            vector_top_k: int = 20,
-            final_k: int = 5,
-            use_reranker: bool = True,
+            retriever,
+            rearanker=None,
+            use_reranker=True,
+            final_k = 5,
     ):
-        """
-        embed_fn: function(query:str) -> np.ndarray
-        retriever: HybridRetriever instance
-        reranker: optional reranker implementing BaseReranker
-        """
 
         self.embed_fn = embed_fn
         self.retriever = retriever
-        self.reranker = reranker
-
-        self.bm25_top_k = bm25_top_k
-        self.vector_top_k = vector_top_k
-        self.final_k = final_k
+        self.reranker = self.reranker
         self.use_reranker = use_reranker
+        self.final_k = final_k
 
-    def run(self,query: str) -> List[Dict[str, Any]]:
+    # -------------------------------------------------
+    # Main pipeline
+    # -------------------------------------------------
+    def run(self, query:str):
         """
-        Full pipeline:
-        1.  Embed query
-        2.  Hybrid retrieval
-        3.  Optional Reranking
-        4.  Return final ranked chunks
+        Returns a list of context chunks:
+        [
+            {
+                "doc_id": int,
+                "score": float              # fused RRF score
+                "text": str,
+                "metadata": dict
+            },
+            ...
+        ]
         """
 
-        # Step 1: Embed query
-        query_emb = self.embed_fn(query)
-        if query_emb.ndim == 1:
-            query_emb = np.expand_dims(query_emb, axis=0)
-        
-        # Step 2: hybrid retrieval
+        # Step 1:  Hybrid retrieval (FAISS + BM25 + RRF)
         fused_results = self.retriever.retrieve(
-            query=query,
-            query_embeddings=query_emb,
-            k=max(self.bm25_top_k, self.vector_top_k),
+            query,
+            embed_fn = self.embed_fn,
+            top_k=self.final_k
         )
 
-        # Step 3: optional reranking
-        if self.use_reranker and self.reranker is not None:
-            reranked = self.retriever.retrieve_with_rerank(
-                query=query,
-                query_embeddings=query_emb,
-                k=max(self.bm25_top_k, self.vector_top_k),
-                reranker=self.reranker,
-                final_k=self.final_k
-            )
-        else:
-            # No reranking - just take the fused results
-            reranked = fused_results[: self.final_k]
+        # Step 2:  Build context chunks
+        context_chunks = []
+        for doc_id, fused_score in fused_results:
+            chunk = {
+                "doc_id": doc_id,
+                "score": float(fused_score),
+                "text": self.retrieve.documents[doc_id],
+                "metadata": self.retriever.metadata[doc_id],
+            }
+            context_chunks.append(chunk)
 
-        # Step 4: format output
-        output = []
-        for doc_id, score in reranked:
-            output.append(
-                {
-                    "doc_id": doc_id,
-                    "score": float(score),
-                    "text": self.retriever.documents[doc_id]
-                }
-            )
+        # Step 3: Optional reranking
+        if self.use_reranker and self.reranker:
+            context_chunks = self.reranker.rerank(query, context_chunks)
 
-        return output
-
-
+        return context_chunks
