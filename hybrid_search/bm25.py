@@ -71,8 +71,8 @@ class BM25:
                 denominator = tf + self.kl * ( 1 - self.b + self.b * (doc_len / self.avg_doc_len))
 
                 scores[doc_id] += idf * (numerator / denominator)
-                
-            return dict(scores)
+              
+        return dict(scores)
         
     def top_k(self, query: str, k: int = 5) -> List[Tuple[int, float]]:
         scores = self.score(query)
