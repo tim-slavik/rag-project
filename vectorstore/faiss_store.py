@@ -35,3 +35,4 @@ class FaissStore:
         store = cls(dim=dim, index=index)
         store._count = index.ntotal
         return store
+
