@@ -1,4 +1,4 @@
-from utils import clean_text
+from chunking.utils import clean_text
 
 
 class Chunker:
