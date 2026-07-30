@@ -1,5 +1,5 @@
 import nltk
-from utils import count_tokens
+from chunking.utils import count_tokens
 
 # Ensure sentence tokenizer is available
 nltk.download("punkt", quiet=True)
