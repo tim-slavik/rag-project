@@ -17,8 +17,7 @@ python-envs/
 
 # Downloads / scraped files
 downloads/
-data/raw/
-data/processed/
+data/*
 
 # Vectorstore files
 *.bin
@@ -37,4 +36,6 @@ Thumbs.db
 
 # VS Code
 .vscode/
+
+# data folder and all files
 
