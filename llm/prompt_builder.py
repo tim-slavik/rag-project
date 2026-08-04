@@ -9,42 +9,53 @@ class PromptBuilder:
     This ensures consistent, deterministic prompt formatting.
     """
 
-    def __init__(self, system_instruction: str = None):
+    def build_prompt(self, query, context_chunks):
         """
-        system_instruction:
-            Optional system-level guidance fot the llm.
-            Example:
-                "You are a helpful assistant.  Use ONLY the provided context."
+        context_chunks: list of dicts with keys:
+            - text
+            - metadata
+            - doc_id
+            - score
         """
-        self.system_instruction = system_instruction or (
-            "You are a helpful assistant.  Use ONLY the provided context to answer."
-        )
 
-    def build(self, query: str, context_chunks: List[Dict]) -> str:
-        """
-        Construct the final prompt.
+        context_blocks = []
 
-        context_chunks is a list of dicts:
-            {
-                "doc_id": int,
-                "score": float,
-                "text": str
-            }
-        """
-        # Build context section
-        context_lines = []
-        for i,chunk in enumerate(context_chunks, start=1):
-            context_lines.append(f'{i}. {chunk["text"]}')
+        for chunk in context_chunks:
+            meta = chunk["metadata"]
 
-        context_block = "\n".join(context_lines)
+            # Extract useful metadata fields if present
+            chunk_id = meta.get("chunk_id", "N/A")
+            sender = meta.get("sender", None)
+            chat_name = meta.get("chat_name", None)
+            timestamp = meta.et("timestamp", None)
+            token_count = meta.get("token_count", None)
 
+            # Build metadata header
+            header_parts = [f"chunk_id={chunk_id}"]
 
-        # Final prompt
+            if sender:
+                header_parts.append(f"sende{sender}")
+            if chat_name:
+                header_parts.append(f"chat={chat_name}")
+            if timestamp:
+                header_parts.append(f"time={timestamp}")
+            if token_count:
+                header_parts.append(f"tokens={token_count}")
+
+            header = " | ".join(header_parts)
+
+            block = f"[{header}]\n{chunk['text']}"
+            context_blocks.append(block)
+
+        context_section = "\n\n".join(context_blocks)
+
         prompt = (
-            f'{self.system_instruction}\n\n'
-            f'Query:\n{query}\n\n'
-            f'Context:\n{context_block}\n\n'
-            f'Abswer:'
+            "You are a helpful assistant.  Use context below to answer the question.\n\n"
+            "Context:\n"
+            f"{context_section}\n\n"
+            "Question:\n"
+            f"{query}\n\n"
+            "Answer:"
         )
 
         return prompt
