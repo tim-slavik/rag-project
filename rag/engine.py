@@ -23,45 +23,72 @@ def default_llm(prompt):
 
 
 class RAGEngine:
-    def __init__(self):
-        print("Loading RAG engine...")
+    def __init__(
+            self,
+            faiss=None,
+            bm25=None,
+            texts=None,
+            metadata=None,
+            model=None,
+            synthesizer=None,
+            load_default=True
+        ):
+        """
+        If load_default=True, load AMAQA dataset.
+        Otherwise, useinjected components (for testing).
+        """
 
-        # -----------------------------
-        # Load FAISS index
-        # -----------------------------
-        print("Loading FAISS index...")
-        self.faiss = FaissStore.load("data/amaqa.index")
+        if load_default:
+            print("Loading RAG engine...")
 
-        # -----------------------------
-        # Load BM25
-        # -----------------------------
-        print("Loading BM25 index...")
-        with open("data/amaqa_bm25.pkl", "rb") as f:
-            self.bm25 = pickle.load(f)
+            # Load FAISS
+            print("Loading FAISS index...")
+            self.faiss = FaissStore.load("data/amaqa.index")
 
-        # -----------------------------
-        # Load text + metadata
-        # -----------------------------
-        print("Loading text + metadata...")
-        with open("data/amaqa_text.json", "r") as f:
-            self.texts = json.load(f)
+            # Load BM25
+            print("Loading BM25 index...")
+            with open("data/amaqa_bm25.pkl", "rb") as f:
+                self.bm25 = pickle.load(f)
 
-        with open("data/amaqa_metadata.json", "r") as f:
-            self.metadata = json.load(f)
+            # Load text + metadata
+            print("Loading text + metadata...")
+            with open("data/amaqa_text.json", "r") as f:
+                self.texts = json.load(f)
 
-        # -----------------------------
-        # Load embedding model
-        # -----------------------------
-        print("Loading MiniLM model...")
-        self.model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
+            with open("data/amaqa_metadata.json", "r") as f:
+                self.metadata = json.load(f)
 
-        # -----------------------------
-        # Adding llm synthesizer
-        # -----------------------------
-        self.synthesizer = Synthesizer(default_llm)
-        
-        
-        print("RAG engine ready.")
+            # Load embedding model
+            print("Loading MiniLM model...")
+            self.model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
+
+            # synthesizer
+            self.synthesizer = Synthesizer(default_llm)
+
+            print("RAG engine ready.")
+
+        else:
+            # Injected components (test mode)
+            self.faiss = faiss
+            self.bm25 = bm25
+            self.texts = texts
+            self.metadata = metadata
+            self.model = model
+            self.synthesizer = synthesizer
+
+    @classmethod
+    def from_documents(cls, docs):
+        # Build BM25, FAISS, metadata, dummy model synthesizer
+        return cls(
+            faiss=faiss,
+            bm25=bm25,
+            texts=docs,
+            metadata=metadata,
+            model=model,
+            synthesizer=synthesizer,
+            load_default=False
+        )
+
 
     # -------------------------------------------------
     # Encode query
