@@ -18,26 +18,7 @@ class CrossEncoderReranker(BaseReranker):
         self.rng = np.random.default_rng(seed)
 
     def score(self, query: str, document: str) -> float:
-        """
-        Fake cross-encoder scoring:
-        - lexical overlap
-        - semantic hint via random noise (deterministic)
-        - normalized to [0, 1]
-
-        Replace this with a real model later.
-        """
-
-        # Tokenize
         q_tokens = set(query.lower().split())
         d_tokens = set(document.lower().split())
-
-        # Lexical overlap
         overlap = len(q_tokens.intersection(d_tokens))
-
-        # Deterministicnoise to simulate semantic scoring
-        noise = float(self.rng.uniform(0, 0.3))
-
-        # Normalize score
-        score = min(1.0, overlap * 0.2 + noise)
-
-        return score
+        return min(1.0, overlap * 0.2)
