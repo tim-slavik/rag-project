@@ -61,16 +61,16 @@ This keeps evaluation output consistent across tests and experiments.
 ## How It Fits in the System
 
 Evaluation sits outside the main RAG pipeline:
-Query
-↓
-Pipeline (retrieval → reranking → RAG engine)
-↓
-Answer + Retrieved Chunks
-↓
-Evaluator
-↓
-Metrics + Report
 
+Query  
+↓  
+Pipeline (retrieval → reranking → RAG engine)  
+↓  
+Answer + Retrieved Chunks  
+↓  
+Evaluator  
+↓  
+Metrics + Report
 
 It is used during development, testing, and regression checks.
 

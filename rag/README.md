@@ -52,8 +52,15 @@ This module is intentionally lightweight so it can be replaced or extended with:
 
 The RAG engine sits between retrieval and the LLM:
 
-Hybrid Retriever → Reranker → RAG Engine → LLM → Final Answer
-
+Hybrid Retriever  
+↓  
+Reranker  
+↓  
+RAG Engine  
+↓  
+LLM  
+↓  
+Final Answer
 
 It is called by the pipeline orchestrator (`pipeline/orchestrator.py`) and used by the API layer (`api/main.py`).
 

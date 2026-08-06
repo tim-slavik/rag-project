@@ -41,18 +41,17 @@ This separation keeps the architecture modular and easy to test.
 
 The orchestrator sits at the center of the RAG pipeline:
 
-User Query
-↓
-Hybrid Retriever (FAISS + BM25 + Fusion)
-↓
-Optional Reranker (Cross Encoder)
-↓
-Pipeline Orchestrator
-↓
-RAG Engine (Prompt + LLM)
-↓
+User Query  
+↓  
+Hybrid Retriever (FAISS + BM25 + Fusion)  
+↓  
+Optional Reranker (Cross Encoder)  
+↓  
+Pipeline Orchestrator  
+↓  
+RAG Engine (Prompt + LLM)  
+↓  
 Final Answer
-
 
 The API layer (`api/main.py`) calls the orchestrator directly for all RAG endpoints.
 

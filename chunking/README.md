@@ -57,18 +57,19 @@ Keeps chunking logic lightweight and strategy‑agnostic.
 ## How It Fits in the System
 
 Chunking is part of the ingestion pipeline:
-Raw Document
-↓
-clean_text()
-↓
-Chunker(strategy).run()
-↓
-Chunk dictionaries
-↓
-Embedding generation
-↓
-FAISS index
-↓
+
+Raw Document  
+↓  
+clean_text()  
+↓  
+Chunker(strategy).run()  
+↓  
+Chunk dictionaries  
+↓  
+Embedding generation  
+↓  
+FAISS index  
+↓  
 Hybrid retrieval
 
 
@@ -106,8 +107,6 @@ This module is designed to support future enhancements such as:
 Adding a new strategy only requires implementing `.chunk(text)`.
 
 ## Testing
-
-The `chunking/tests/` folder is currently empty.
 
 Chunking behavior is indirectly validated through:
 - ingestion tests

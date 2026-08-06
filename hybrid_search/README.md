@@ -64,24 +64,23 @@ This is the component used by:
 
 Hybrid search sits at the front of the RAG pipeline:
 
-Query
-↓
-FAISS Vector Search
-↓
-BM25 Lexical Search
-↓
-Reciprocal Rank Fusion (RRF)
-↓
-Optional Reranking
-↓
-Pipeline Orchestrator
-↓
-RAG Engine
-↓
-LLM
-↓
+Query  
+↓  
+FAISS Vector Search  
+↓  
+BM25 Lexical Search  
+↓  
+Reciprocal Rank Fusion (RRF)  
+↓  
+Optional Reranking  
+↓  
+Pipeline Orchestrator  
+↓  
+RAG Engine  
+↓  
+LLM  
+↓  
 Final Answer
-
 
 It ensures that the RAG engine receives the best possible context.
 

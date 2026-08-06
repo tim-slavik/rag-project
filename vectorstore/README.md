@@ -47,18 +47,24 @@ Utility functions for:
 
 These helpers keep the main FAISS store implementation clean.
 
-### `examples/`
-Contains small example FAISS indexes and embedding files for demonstration and testing.
-
-Useful for:
-- sanity checks
-- development without loading full AMAQA data
-- verifying FAISS behavior in isolation
-
 ## How It Fits in the System
 
 The vectorstore sits at the foundation of the retrieval pipeline:
-Embeddings → FAISS Index → Vectorstore → Hybrid Retriever → Pipeline → RAG Engine → LLM
+
+Embeddings  
+↓  
+FAISS Index  
+↓  
+Vectorstore  
+↓  
+Hybrid Retriever  
+↓  
+Pipeline  
+↓  
+RAG Engine  
+↓  
+LLM
+
 It provides the dense retrieval signal used by hybrid search.
 
 ## Responsibilities
@@ -95,8 +101,8 @@ Because the pipeline uses the base interface, new backends can be added without 
 
 ## Testing
 
-Tests (indirectly) for the vectorstore are located in:
-tests/test_retrieval.py
-tests/test_rag_pipeline.py
-tests/test_grounding.py
+Tests (indirectly) for the vectorstore are located in:  
+tests/test_retrieval.py  
+tests/test_rag_pipeline.py  
+tests/test_grounding.py  
 tests/test_regression.py

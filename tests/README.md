@@ -96,22 +96,23 @@ Removed because:
 ## How Tests Fit in the System
 
 Tests validate the entire RAG stack:
-Chunking
-↓
-Embeddings
-↓
-FAISS Index
-↓
-Hybrid Retrieval
-↓
-Optional Reranking
-↓
-Pipeline Orchestrator
-↓
-RAG Engine
-↓
-LLM Wrapper
-↓
+
+Chunking  
+↓  
+Embeddings  
+↓  
+FAISS Index  
+↓  
+Hybrid Retrieval  
+↓  
+Optional Reranking  
+↓  
+Pipeline Orchestrator  
+↓  
+RAG Engine  
+↓  
+LLM Wrapper  
+↓  
 Evaluation
 
 This ensures that every layer behaves consistently and integrates correctly.

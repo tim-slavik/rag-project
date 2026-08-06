@@ -51,8 +51,18 @@ The prompt builder ensures that the LLM receives:
 ## How It Fits in the System
 
 The LLM module sits at the end of the RAG pipeline:
-Hybrid Retrieval → Reranking → RAG Engine → Prompt Builder → LLM Wrapper → Final Answer
 
+Hybrid Retrieval  
+↓  
+Reranking  
+↓  
+RAG Engine  
+↓  
+Prompt Builder  
+↓  
+LLM Wrapper  
+↓  
+Final Answer
 
 It is called by:
 - `rag/engine.py`

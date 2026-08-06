@@ -45,18 +45,18 @@ It is not intended to be a production‑quality relevance model.
 ## How It Fits in the System
 
 Reranking sits between hybrid retrieval and the pipeline orchestrator:
-Hybrid Retrieval (FAISS + BM25 + Fusion)
-↓
-Optional Reranker (Cross Encoder)
-↓
-Pipeline Orchestrator
-↓
-RAG Engine
-↓
-LLM
-↓
-Final Answer
 
+Hybrid Retrieval (FAISS + BM25 + Fusion)  
+↓  
+Optional Reranker (Cross Encoder)  
+↓  
+Pipeline Orchestrator  
+↓  
+RAG Engine  
+↓  
+LLM  
+↓  
+Final Answer
 
 If reranking is disabled, the pipeline simply uses the fused retrieval results.
 
