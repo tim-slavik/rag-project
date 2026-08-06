@@ -1,0 +1,37 @@
+[
+  {
+    "id": "q1",
+    "question": "What animals live in forests?",
+    "expected_answer": "Foxes and other wild animals.",
+    "expected_keywords": ["fox", "wild animals", "forests"],
+    "difficulty": "easy"
+  },
+  {
+    "id": "q2",
+    "question": "What does the document say about foxes?",
+    "expected_answer": "Foxes are wild animals found in forests.",
+    "expected_keywords": ["fox", "wild animals", "forests"],
+    "difficulty": "easy"
+  },
+  {
+    "id": "q3",
+    "question": "What is machine learning?",
+    "expected_answer": "Machine learning uses neural networks.",
+    "expected_keywords": ["neural networks", "machine learning"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q4",
+    "question": "What does the document say about unicorns?",
+    "expected_answer": "The documents do not mention unicorns.",
+    "expected_keywords": [],
+    "difficulty": "hallucination"
+  },
+  {
+    "id": "q5",
+    "question": "Summarize the content about forests.",
+    "expected_answer": "Forests contain many wild animals including foxes.",
+    "expected_keywords": ["forests", "wild animals", "foxes"],
+    "difficulty": "summary"
+  }
+]
