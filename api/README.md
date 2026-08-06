@@ -56,6 +56,7 @@ These schemas ensure consistent, predictable API behavior.
 ## How It Fits in the System
 
 The API sits at the top of the RAG stack:
+
 Client → FastAPI → Pipeline Orchestrator → RAG Engine → LLM → Answer
 
 
