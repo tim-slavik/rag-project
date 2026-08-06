@@ -1,46 +1,102 @@
-# Vectorstore Module (Section 4)
+# Vectorstore Module
 
-This module provides the vector storage layer for the RAG pipeline.  
-It handles embedding storage, similarity search, and index persistence.
+The `vectorstore/` module provides the storage and retrieval layer for dense embeddings used by the RAG system. It wraps FAISS functionality behind a clean, modular interface and ensures that vector search is fast, reliable, and easy to integrate with the rest of the pipeline.
+
+This module is responsible for loading, querying, and managing the FAISS index and associated embedding metadata.
+
+## Overview
+
+The vectorstore layer provides:
+- A base interface for vector storage (`base_store.py`)
+- A FAISS-backed implementation (`faiss_store.py`)
+- Utility functions for loading embeddings and indexes (`utils.py`)
+- Example artifacts for testing and demonstration (`examples/`)
+
+It is designed to be modular so additional vectorstore backends (e.g., Milvus, Pinecone, Elasticsearch) can be added later without changing the pipeline.
 
 ## Files
 
-- **faiss_store.py**  
-  FAISS-based vector store implementation using exact L2 search.
+### `base_store.py`
+Defines the abstract interface for vectorstores.
 
-- **base_store.py**  
-  Abstract interface for all vectorstores. Allows future upgrades
-  (Chroma, Milvus, Pinecone) without changing retrieval code.
+Responsibilities:
+- Define required methods (`search`, `add`, `load`, etc.)
+- Provide a consistent API for all vectorstore implementations
+- Allow the pipeline to remain backend-agnostic
 
-- **utils.py**  
-  Small helpers for validation and array formatting.
+This abstraction makes the system extensible and testable.
 
-- **examples/**
-  - `sample_embeddings.npy` — example embedding matrix
-  - `sample_index.faiss` — example FAISS index
-  - `generate_sample_index.py` — script to generate the example index
+### `faiss_store.py`
+Implements the FAISS-based vectorstore.
 
-- **tests/**
-  - `test_faiss_store.py` — basic unit tests for add/search/save/load
+Key responsibilities:
+- Load FAISS index files
+- Load embedding matrices
+- Run similarity search
+- Return ranked document IDs and scores
+- Provide metadata lookup for retrieved chunks
 
-## Purpose
+This is the primary vectorstore used by the hybrid search module.
 
-The vectorstore provides:
-- fast similarity search
-- efficient embedding storage
-- clean interface for retrieval
-- foundation for hybrid search and reranking
+### `utils.py`
+Utility functions for:
+- Loading embeddings from `.npy` files
+- Loading FAISS index files
+- Validating index/embedding compatibility
+- Normalizing vectors if needed
 
-This module is designed to be simple, modular, and easy to extend.
+These helpers keep the main FAISS store implementation clean.
 
-## Usage
+### `examples/`
+Contains small example FAISS indexes and embedding files for demonstration and testing.
 
-```python
-from 04_vectorstore.faiss_store import FaissStore
-import numpy as np
+Useful for:
+- sanity checks
+- development without loading full AMAQA data
+- verifying FAISS behavior in isolation
 
-store = FaissStore(dim=384)
-store.add(np.random.rand(10, 384).astype("float32"))
+## How It Fits in the System
 
-query = np.random.rand(1, 384).astype("float32")
-distances, indices = store.search(query, k=3)
+The vectorstore sits at the foundation of the retrieval pipeline:
+Embeddings → FAISS Index → Vectorstore → Hybrid Retriever → Pipeline → RAG Engine → LLM
+It provides the dense retrieval signal used by hybrid search.
+
+## Responsibilities
+
+The vectorstore module is responsible for:
+- Managing FAISS index files
+- Running dense similarity search
+- Returning ranked document IDs and scores
+- Providing metadata lookup for retrieved chunks
+- Ensuring fast, efficient vector retrieval
+
+## Not Responsible For
+
+The vectorstore does NOT:
+- Generate embeddings
+- Build FAISS indexes
+- Perform BM25 search
+- Fuse retrieval results
+- Call the LLM
+- Handle synthesis or prompting
+
+Those responsibilities belong to other modules.
+
+## Extensibility
+
+The vectorstore layer is designed to support:
+- Additional FAISS index types
+- GPU-backed FAISS
+- Alternative vectorstores (Milvus, Pinecone, Qdrant)
+- Sharded or distributed indexes
+- On-the-fly index updates
+
+Because the pipeline uses the base interface, new backends can be added without modifying the orchestrator.
+
+## Testing
+
+Tests (indirectly) for the vectorstore are located in:
+tests/test_retrieval.py
+tests/test_rag_pipeline.py
+tests/test_grounding.py
+tests/test_regression.py
